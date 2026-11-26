@@ -7,3 +7,4 @@ server/uploads/
 .DS_Store
 coverage/
 *.tsbuildinfo
+supabase/node_modules/

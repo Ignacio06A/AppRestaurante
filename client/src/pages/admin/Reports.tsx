@@ -7,6 +7,8 @@ import { api, qs } from '../../lib/api';
 import { compactMoney, money, monthLabel, shortDay, todayLocal } from '../../lib/format';
 import { Button, Card, CardHeader, ErrorState, Input, Loading, PageHeader, StatCard, Tabs } from '../../components/ui';
 import { CHART, ChartTooltip } from './Dashboard';
+import { useSettings } from '../../lib/hooks';
+import { exportExcel, exportPdf, SalesReport } from '../../lib/exporters';
 
 interface Report {
   range: { from: string; to: string; days: number };
@@ -46,19 +48,16 @@ export default function Reports() {
     if (p !== 'CUSTOM') setRange(presetRange(p));
   };
 
+  const { data: settings } = useSettings();
   const exportFile = async (format: 'pdf' | 'xlsx') => {
+    if (!q.data) return;
     setExporting(format);
     try {
-      const res = await fetch(`/api/reports/sales/export${qs({ ...range, format })}`, { credentials: 'include' });
-      if (!res.ok) throw new Error((await res.json().catch(() => null))?.error?.message ?? 'No se pudo exportar');
-      const blob = await res.blob();
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `reporte-ventas-${range.from}_${range.to}.${format}`;
-      a.click();
-      URL.revokeObjectURL(a.href);
+      const name = settings?.name ?? 'Restaurante';
+      if (format === 'pdf') await exportPdf(q.data as unknown as SalesReport, name);
+      else await exportExcel(q.data as unknown as SalesReport, name);
     } catch (e) {
-      toast.error((e as Error).message);
+      toast.error((e as Error).message || 'No se pudo exportar');
     } finally {
       setExporting(null);
     }

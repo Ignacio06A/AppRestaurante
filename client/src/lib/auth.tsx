@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { api } from './api';
+import { supabase } from './supabase';
 import { RoleCode, User } from './types';
 
 interface AuthCtx {
@@ -34,8 +35,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const qc = useQueryClient();
 
   useEffect(() => {
-    api
-      .get<User>('/auth/me')
+    supabase.auth
+      .getSession()
+      .then(({ data }) => (data.session ? api.get<User>('/auth/me') : null))
       .then(setUser)
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
@@ -44,7 +46,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       qc.clear();
     };
     window.addEventListener('auth:expired', onExpired);
-    return () => window.removeEventListener('auth:expired', onExpired);
+    // Si la sesión de Supabase se cierra (expirada, otra pestaña), volver al login
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') onExpired();
+    });
+    return () => {
+      window.removeEventListener('auth:expired', onExpired);
+      sub.subscription.unsubscribe();
+    };
   }, [qc]);
 
   const login = useCallback(async (username: string, password: string) => {

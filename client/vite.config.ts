@@ -3,14 +3,6 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 5173,
-    host: true,
-    proxy: {
-      '/api': 'http://localhost:4000',
-      '/uploads': 'http://localhost:4000',
-      '/socket.io': { target: 'http://localhost:4000', ws: true },
-    },
-  },
-  build: { chunkSizeWarningLimit: 1200 },
+  server: { port: 5173, host: true },
+  build: { chunkSizeWarningLimit: 1500 },
 });

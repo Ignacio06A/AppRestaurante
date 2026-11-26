@@ -19,12 +19,12 @@ interface Row {
 
 export default function AuditPage() {
   const [page, setPage] = useState(1);
-  const [userId, setUserId] = useState<number | ''>('');
+  const [userId, setUserId] = useState<string>('');
   const [action, setAction] = useState('');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const a = useDebounced(action);
-  const users = useQuery({ queryKey: ['users', '', ''], queryFn: () => api.get<{ id: number; name: string }[]>('/admin/users') });
+  const users = useQuery({ queryKey: ['users', '', ''], queryFn: () => api.get<{ id: string; name: string }[]>('/admin/users') });
   const q = useQuery({
     queryKey: ['audit', page, userId, a, from, to],
     queryFn: () => api.get<{ total: number; rows: Row[] }>(`/audit${qs({ page, pageSize: 50, userId, action: a, from, to })}`),
@@ -35,7 +35,7 @@ export default function AuditPage() {
       <Card className="mb-4 flex flex-wrap items-end gap-3 p-4">
         <label className="min-w-[200px]">
           <span className="label">Usuario</span>
-          <Select value={userId} onChange={(e) => (setPage(1), setUserId(e.target.value ? Number(e.target.value) : ''))}>
+          <Select value={userId} onChange={(e) => (setPage(1), setUserId(e.target.value))}>
             <option value="">Todos</option>
             {users.data?.map((u) => (
               <option key={u.id} value={u.id}>
