@@ -148,7 +148,7 @@ export async function setItemsStatus(user: AuthUser, area: AreaCode, itemIds: nu
       const allReady = r.remaining === 0;
       await createNotification(r.order.waiterId, {
         type: allReady ? 'ORDER_READY' : 'ITEMS_READY',
-        title: allReady ? `Mesa ${r.order.table.name}: ¡pedido completo listo!` : `Mesa ${r.order.table.name}: listo en ${areaName}`,
+        title: allReady ? `${r.order.table.name}: ¡pedido completo listo!` : `${r.order.table.name}: listo en ${areaName}`,
         message: r.changed.map((i) => `${i.quantity}x ${i.productName}`).join(', '),
         data: { orderId: r.order.id, tableId: r.order.tableId, area, itemIds: r.changed.map((i) => i.id), allReady },
       });

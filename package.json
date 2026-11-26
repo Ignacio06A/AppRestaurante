@@ -1,0 +1,15 @@
+{
+  "name": "comanda-restaurante",
+  "private": true,
+  "description": "Sistema web integral de gestión de restaurante: meseros, cocina, bar, caja y reportes en tiempo real",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "db:migrate": "npm --prefix server run db:migrate",
+    "db:seed": "npm --prefix server run db:seed",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "build": "npm --prefix server run build && npm --prefix client run build",
+    "start": "npm --prefix server run start",
+    "test": "npm --prefix server test"
+  }
+}

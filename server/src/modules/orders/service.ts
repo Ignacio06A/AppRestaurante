@@ -191,7 +191,7 @@ export async function openOrder(user: AuthUser, input: { tableId: number; guests
       }
       throw e;
     }
-    await history(tx, { orderId: order.id, userId: user.id, action: 'ORDER_OPENED', description: `Mesa ${table.name} abierta para ${input.guests} persona(s)` });
+    await history(tx, { orderId: order.id, userId: user.id, action: 'ORDER_OPENED', description: `${table.name} abierta para ${input.guests} persona(s)` });
     let batchInfo: Awaited<ReturnType<typeof addBatch>> | null = null;
     if (input.items?.length) batchInfo = await addBatch(tx, order.id, user, input.items);
     return { order, table, batchInfo };
@@ -383,7 +383,7 @@ export async function cancelItem(user: AuthUser, orderId: number, itemId: number
   if (opts.fromKds && r.order.waiterId !== user.id) {
     await createNotification(r.order.waiterId, {
       type: 'ITEM_CANCELLED',
-      title: `Mesa ${r.order.table.name}: producto cancelado`,
+      title: `${r.order.table.name}: producto cancelado`,
       message: `${r.item.area.name} canceló ${r.item.quantity}x ${r.item.productName}. Motivo: ${reason}`,
       data: { orderId, itemId, tableId: r.order.tableId },
     });

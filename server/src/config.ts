@@ -15,6 +15,8 @@ export const config = {
   clientOrigin: (process.env.CLIENT_ORIGIN ?? 'http://localhost:5173').split(',').map((s) => s.trim()),
   cookieName: 'rms_token',
   uploadDir: process.env.UPLOAD_DIR ?? 'uploads',
+  /** Cookie solo por HTTPS. Poner COOKIE_SECURE=false si se sirve por HTTP en red local. */
+  cookieSecure: process.env.COOKIE_SECURE ? process.env.COOKIE_SECURE === 'true' : (process.env.NODE_ENV ?? 'development') === 'production',
   get isProd() {
     return this.env === 'production';
   },

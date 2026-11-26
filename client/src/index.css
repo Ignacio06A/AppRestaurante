@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-tap-highlight-color: transparent; }
+  body { @apply bg-ink-50 text-ink-900 antialiased; font-feature-settings: 'tnum' 1, 'cv11' 1; }
+  ::selection { @apply bg-brand-200; }
+  :focus-visible { @apply outline-none ring-2 ring-brand-400 ring-offset-2 ring-offset-white; }
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900 placeholder:text-ink-400
+      transition focus:border-brand-400 focus:outline-none focus:ring-4 focus:ring-brand-100 disabled:bg-ink-100 disabled:text-ink-500;
+  }
+  .label { @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-500; }
+  .card { @apply rounded-2xl border border-ink-200/70 bg-white shadow-card; }
+  .table-base { @apply w-full text-sm; }
+  .table-base thead th { @apply whitespace-nowrap border-b border-ink-200 bg-ink-50/80 px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-ink-500; }
+  .table-base tbody td { @apply border-b border-ink-100 px-4 py-3 align-middle; }
+  .table-base tbody tr:last-child td { @apply border-b-0; }
+  .table-base tbody tr { @apply transition-colors hover:bg-ink-50/60; }
+  .scrollbar-thin { scrollbar-width: thin; }
+}
+
+@media print {
+  body { background: white !important; }
+  .no-print { display: none !important; }
+}

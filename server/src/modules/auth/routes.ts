@@ -21,7 +21,7 @@ const loginLimiter = rateLimit({
 });
 
 function cookieOptions() {
-  return { httpOnly: true, sameSite: 'lax' as const, secure: config.isProd, maxAge: 12 * 3600_000, path: '/' };
+  return { httpOnly: true, sameSite: 'lax' as const, secure: config.cookieSecure, maxAge: 12 * 3600_000, path: '/' };
 }
 
 authRouter.post(
