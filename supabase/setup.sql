@@ -1,7 +1,7 @@
 -- =============================================================
---  Comanda — instalación completa en Supabase (generado)
---  Pegue TODO este archivo en Supabase → SQL Editor y ejecútelo una vez.
---  Contiene las migraciones de supabase/migrations y los datos de seed.sql.
+--  Comanda — instalación completa en Supabase (archivo generado)
+--  Pegue TODO este archivo en Supabase → SQL Editor y ejecútelo una vez
+--  en un proyecto nuevo. Regenerar con: npm run setup-sql
 -- =============================================================
 
 -- >>> migrations/20261126000001_schema.sql
@@ -343,6 +343,7 @@ create table public.restaurant_settings (
   updated_at           timestamptz not null default now()
 );
 
+
 -- >>> migrations/20261126000002_security.sql
 -- =============================================================
 --  02. Seguridad: funciones auxiliares, RLS y privilegios
@@ -555,6 +556,7 @@ create policy reg_insert on public.cash_registers for insert to authenticated wi
 grant insert on public.cash_registers to authenticated;
 
 grant usage on all sequences in schema public to authenticated;
+
 
 -- >>> migrations/20261126000003_orders.sql
 -- =============================================================
@@ -1363,6 +1365,7 @@ begin
   perform _cancel_item(v_uid, i.order_id, p_item_id, p_reason, true);
 end $$;
 
+
 -- >>> migrations/20261126000004_payments_cash.sql
 -- =============================================================
 --  04. Caja: cuentas, pagos, división y control de caja
@@ -1753,6 +1756,7 @@ begin
                       from (select id, opened_at from cash_sessions order by opened_at desc offset (p_page - 1) * p_page_size limit p_page_size) x), '[]'::jsonb));
 end $$;
 
+
 -- >>> migrations/20261126000005_reports_admin.sql
 -- =============================================================
 --  05. Reportes, administración de usuarios/roles y bitácora
@@ -2079,6 +2083,7 @@ begin
   end loop;
 end $$;
 
+
 -- >>> migrations/20261126000006_realtime_storage.sql
 -- =============================================================
 --  06. Tiempo real (Supabase Realtime) y almacenamiento de imágenes
@@ -2116,6 +2121,7 @@ begin
       using (bucket_id = 'images' and public.has_any_perm(array['menu.manage','settings.manage']))$p$;
   end if;
 end $$;
+
 
 -- >>> seed.sql
 -- =============================================================
